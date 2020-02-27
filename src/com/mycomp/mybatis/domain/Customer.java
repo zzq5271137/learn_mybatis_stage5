@@ -16,5 +16,4 @@ public class Customer implements Serializable {
     private String cust_profession;
     private String cust_phone;
     private String email;
-
 }
