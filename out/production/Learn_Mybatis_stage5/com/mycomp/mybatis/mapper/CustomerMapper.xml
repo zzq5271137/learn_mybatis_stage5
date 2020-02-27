@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mycomp.mybatis.mapper.CustomerMapper">
+    <!--
+        二级缓存配置:
+        1. eviction: 回收策略
+           a. LRU: 最近最少使用, 移除最长时间不用的对象
+           b. FIFO: 先进先出, 按对象进入缓存的顺序移除对象
+           c. SOFT: 软引入, 移除基本垃圾回收器状态和软引入规则的对象
+           d. WEAK: 弱引用, 移除基本垃圾回收器状态和弱引用规则的对象
+        2. flushInterval: 刷新间隔, 默认不清空
+        3. readOnly: 是否只读
+           a. true: 告诉Mybatis是只读操作, 不去修改数据, Mybatis为了加快获取速度, 会直接将缓存的引用将给用, 不安全, 速度快
+           b. false: 非只读,有可能修改数据, Mybatis会利用序列化和反序列化复制一份给你, 速度慢些
+        4. size: 可以存放多少个元素
+        5. type: 可以用来指定自定义的缓存(使用第三方的缓存)
+    -->
+    <cache eviction="LRU" flushInterval="1000" readOnly="true" size="100"/>
+
+    <select id="getCustomerById"
+            resultType="com.mycomp.mybatis.domain.Customer" useCache="true">
+        SELECT * FROM customer WHERE cust_id = #{id}
+    </select>
+
+    <insert id="insertCustomer" flushCache="true">
+        INSERT INTO customer (cust_name) VALUES (#{cust_name})
+    </insert>
+
+    <select id="getAllCustomers"
+            resultType="com.mycomp.mybatis.domain.Customer">
+        SELECT * FROM customer
+    </select>
+
+</mapper>
